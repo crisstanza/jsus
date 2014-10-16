@@ -37,5 +37,9 @@ JSUS.assert = function(obj, msg) {
 };
 
 JSUS.assertEquals = function(obj1, obj2) {
-	JSUS.assert(obj1 == obj2, '['+obj1+'] should be equals to ['+obj2+']')
+	JSUS.assert(obj1 == obj2, '['+obj2+'] should be equals to ['+obj1+']')
+};
+
+JSUS.assertBetween = function(limInf, limSup, obj) {
+	JSUS.assert(obj > limInf && obj < limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+']')
 };
