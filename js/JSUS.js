@@ -8,6 +8,7 @@ JSUS.prototype.start = function() {
 	}
 	var inTestNow, startTime, endTime;
 	var testObject = new this.testClass();
+	var n = 1;
 	for (var testMethod in testObject) {
 		if (this.isTestableMethod(testMethod)) {
 			inTestNow = '['+testObject.constructor.name+'].'+testMethod+'()';
@@ -16,14 +17,15 @@ JSUS.prototype.start = function() {
 				testObject[testMethod]();
 				endTime = new Date().getTime();
 				{
-					console.log('  '+inTestNow+' [SUCCESS] ['+this.formatTime(endTime - startTime)+']');
+					console.log('  '+n+'. '+inTestNow+' [SUCCESS] ['+this.formatTime(endTime - startTime)+']');
 				}
 			} catch (error) {
 				endTime = new Date().getTime();
 				{
-					console.log('  '+inTestNow+' [FAIL] ['+this.formatTime(endTime - startTime)+'] '+error.message);
+					console.log('  '+n+'. '+inTestNow+' [FAIL] ['+this.formatTime(endTime - startTime)+'] '+error.message);
 				}
 			}
+			n++;
 		}
 	}
 };
@@ -44,16 +46,36 @@ JSUS.prototype.isTestableMethod = function(methodName) {
 	return methodName.match(/test.*/);
 };
 
-JSUS.assert = function(obj, msg) {
-	if (obj == false) {
-		throw new Error(msg);
+(function() {
+
+	function assert (obj, msg) {
+		if (obj === false) {
+			throw new Error(msg);
+		}
 	}
-};
 
-JSUS.assertEquals = function(obj1, obj2) {
-	JSUS.assert(obj1 == obj2, '['+obj2+'] should be equals to ['+obj1+']')
-};
+	JSUS.assertTrue = function(obj) {
+		assert(obj === true, '['+obj+'] should be [true]')
+	};
 
-JSUS.assertBetween = function(limInf, limSup, obj) {
-	JSUS.assert(obj > limInf && obj < limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+']')
-};
+	JSUS.assertFalse = function(obj) {
+		assert(obj === false, '['+obj+'] should be [false]')
+	};
+
+	JSUS.assertNull = function(obj) {
+		assert(obj === null, '['+obj+'] should be [null]')
+	};
+
+	JSUS.assertUndefined = function(obj) {
+		assert(obj === undefined, '['+obj+'] should be [undefined]')
+	};
+
+	JSUS.assertEquals = function(obj1, obj2) {
+		assert(obj1 === obj2, '['+obj2+'] should be equals to ['+obj1+']')
+	};
+
+	JSUS.assertBetween = function(limInf, limSup, obj) {
+		assert(obj > limInf && obj < limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+']')
+	};
+
+})();
