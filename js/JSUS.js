@@ -6,18 +6,22 @@ JSUS.prototype.start = function() {
 	{
 		console.log('JSUS.prototype.start');
 	}
+	var inTestNow, startTime, endTime;
 	var testObject = new this.testClass();
 	for (var testMethod in testObject) {
-		if (testMethod in testObject) {
-			var inTestNow = '['+testObject.constructor.name+'].'+testMethod+'()';
+		if (this.isTestableMethod(testMethod)) {
+			inTestNow = '['+testObject.constructor.name+'].'+testMethod+'()';
+			startTime = new Date().getTime();
 			try {
 				testObject[testMethod]();
+				endTime = new Date().getTime();
 				{
-					console.log('  '+inTestNow+' [SUCCESS]');
+					console.log('  '+inTestNow+' [SUCCESS] ['+this.formatTime(endTime - startTime)+']');
 				}
 			} catch (error) {
+				endTime = new Date().getTime();
 				{
-					console.log('  '+inTestNow+' [FAIL] '+error.message);
+					console.log('  '+inTestNow+' [FAIL] ['+this.formatTime(endTime - startTime)+'] '+error.message);
 				}
 			}
 		}
@@ -29,6 +33,16 @@ JSUS.prototype.end = function() {
 		console.log('JSUS.prototype.end');
 	}
 }
+
+JSUS.prototype.formatTime = function(ms) {
+	var s = ms / 1000;
+	// ms = ms % 1000;
+	return s+'s';
+};
+
+JSUS.prototype.isTestableMethod = function(methodName) {
+	return methodName.match(/test.*/);
+};
 
 JSUS.assert = function(obj, msg) {
 	if (obj == false) {
