@@ -2,49 +2,65 @@ function JSUS(testClass) {
 	this.testClass = testClass;
 }
 
-JSUS.prototype.start = function() {
-	{
-		console.log('JSUS.prototype.start');
-	}
-	var inTestNow, startTime, endTime;
-	var testObject = new this.testClass();
-	var n = 1;
-	for (var testMethod in testObject) {
-		if (this.isTestableMethod(testMethod)) {
-			inTestNow = '['+testObject.constructor.name+'].'+testMethod+'()';
-			startTime = new Date().getTime();
-			try {
-				testObject[testMethod]();
-				endTime = new Date().getTime();
-				{
-					console.log('  '+n+'. '+inTestNow+' [SUCCESS] ['+this.formatTime(endTime - startTime)+']');
-				}
-			} catch (error) {
-				endTime = new Date().getTime();
-				{
-					console.log('  '+n+'. '+inTestNow+' [FAIL] ['+this.formatTime(endTime - startTime)+'] '+error.message);
-				}
-			}
-			n++;
+(function() {
+
+	function formatTime(ms) {
+		var s = ms / 1000;
+		// ms = ms % 1000;
+		return s+'s';
+	};
+
+	function checkAndTestIt(testObject, testMethod) {
+		if (testObject[testMethod]) {
+			testIt('', testObject, testMethod);
 		}
 	}
-};
 
-JSUS.prototype.end = function() {
-	{
-		console.log('JSUS.prototype.end');
+	function testIt(n, testObject, testMethod) {
+		var inTestNow = '['+testObject.constructor.name+'].'+testMethod+'()';
+		var startTime = new Date().getTime();
+		var endTime;
+		try {
+			testObject[testMethod]();
+			endTime = new Date().getTime();
+			{
+				console.log('  '+(n ? '  '+n+'. ' : '')+inTestNow+' [SUCCESS] ['+formatTime(endTime - startTime)+']');
+			}
+		} catch (error) {
+			endTime = new Date().getTime();
+			{
+				console.log('  '+(n ? '  '+n+'. ' : '')+inTestNow+' [FAIL] ['+formatTime(endTime - startTime)+'] '+error.message);
+			}
+		}
 	}
-}
 
-JSUS.prototype.formatTime = function(ms) {
-	var s = ms / 1000;
-	// ms = ms % 1000;
-	return s+'s';
-};
+	JSUS.prototype.start = function() {
+		{
+			console.log('JSUS.prototype.start');
+		}
+		var testObject = new this.testClass();
+		checkAndTestIt(testObject, 'beforeClass');
+		var n = 1;
+		for (var testMethod in testObject) {
+			if (this.isTestableMethod(testMethod)) {
+				testIt(n, testObject, testMethod);
+				n++;
+			}
+		}
+		checkAndTestIt(testObject, 'afterClass');
+	};
 
-JSUS.prototype.isTestableMethod = function(methodName) {
-	return methodName.match(/test.*/);
-};
+	JSUS.prototype.end = function() {
+		{
+			console.log('JSUS.prototype.end');
+		}
+	}
+
+	JSUS.prototype.isTestableMethod = function(methodName) {
+		return methodName.match(/test.*/);
+	};
+
+})();
 
 (function() {
 
