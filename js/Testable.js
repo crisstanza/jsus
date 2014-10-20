@@ -15,6 +15,30 @@ Testable.prototype.testEquals = function() {
 	}
 };
 
+Testable.prototype.testEqualsFAIL = function() {
+	var expected = 1;
+	var current = 0;
+	{
+		JSUS.assertEquals(expected, current);
+	}
+};
+
+Testable.prototype.testNotEquals = function() {
+	var expected = 1;
+	var current = 0;
+	{
+		JSUS.assertNotEquals(expected, current);
+	}
+};
+
+Testable.prototype.testNotEqualsFAIL = function() {
+	var expected = 0;
+	var current = 0;
+	{
+		JSUS.assertNotEquals(expected, current);
+	}
+};
+
 Testable.prototype.testEqualsNull = function() {
 	var expected = null;
 	var current = null;
@@ -23,9 +47,9 @@ Testable.prototype.testEqualsNull = function() {
 	}
 };
 
-Testable.prototype.testEqualsFAIL = function() {
-	var expected = 1;
-	var current = 2;
+Testable.prototype.testEqualsUndefined = function() {
+	var expected = undefined;
+	var current = undefined;
 	{
 		JSUS.assertEquals(expected, current);
 	}

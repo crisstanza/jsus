@@ -1,6 +1,4 @@
-function JSUS(testClass) {
-	this.testClass = testClass;
-}
+function JSUS(testClass) { this.testClass = testClass; }
 
 (function() {
 
@@ -8,6 +6,10 @@ function JSUS(testClass) {
 		var s = ms / 1000;
 		// ms = ms % 1000;
 		return s+'s';
+	};
+
+	function isTestableMethod(methodName) {
+		return methodName.match(/test.*/);
 	};
 
 	function checkAndTestIt(testObject, testMethod) {
@@ -42,7 +44,7 @@ function JSUS(testClass) {
 		checkAndTestIt(testObject, 'beforeClass');
 		var n = 1;
 		for (var testMethod in testObject) {
-			if (this.isTestableMethod(testMethod)) {
+			if (isTestableMethod(testMethod)) {
 				testIt(n, testObject, testMethod);
 				n++;
 			}
@@ -56,10 +58,6 @@ function JSUS(testClass) {
 		}
 	}
 
-	JSUS.prototype.isTestableMethod = function(methodName) {
-		return methodName.match(/test.*/);
-	};
-
 })();
 
 (function() {
@@ -71,27 +69,31 @@ function JSUS(testClass) {
 	}
 
 	JSUS.assertTrue = function(obj) {
-		assert(obj === true, '['+obj+'] should be [true]')
+		assert(obj === true, '['+obj+'] should be [true]');
 	};
 
 	JSUS.assertFalse = function(obj) {
-		assert(obj === false, '['+obj+'] should be [false]')
+		assert(obj === false, '['+obj+'] should be [false]');
 	};
 
 	JSUS.assertNull = function(obj) {
-		assert(obj === null, '['+obj+'] should be [null]')
+		assert(obj === null, '['+obj+'] should be [null]');
 	};
 
 	JSUS.assertUndefined = function(obj) {
-		assert(obj === undefined, '['+obj+'] should be [undefined]')
+		assert(obj === undefined, '['+obj+'] should be [undefined]');
 	};
 
 	JSUS.assertEquals = function(obj1, obj2) {
-		assert(obj1 === obj2, '['+obj2+'] should be equals to ['+obj1+']')
+		assert(obj1 === obj2, '['+obj2+'] should be equals to ['+obj1+']');
+	};
+
+	JSUS.assertNotEquals = function(obj1, obj2) {
+		assert(obj1 !== obj2, '['+obj2+'] should not be equals to ['+obj1+']');
 	};
 
 	JSUS.assertBetween = function(limInf, limSup, obj) {
-		assert(obj > limInf && obj < limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+']')
+		assert(obj > limInf && obj < limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+']');
 	};
 
 })();
