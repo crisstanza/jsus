@@ -190,6 +190,8 @@ pre code {
   background-color: #303030;
   border: none;
   padding: 0;
+  font-family: courier;
+  font-size: 10pt;
 }
 
 ul, ol, dl {
