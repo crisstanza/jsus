@@ -1,24 +1,32 @@
-function JSUS(testClass) { this.testClass = testClass; }
+function JSUS(testClass) {
+	this.testClass = testClass;
+	this.id = undefined;
+	this.buffer = [];
+}
 
 (function() {
 
 	function formatTime(ms) {
 		var s = ms / 1000;
-		// ms = ms % 1000;
-		return s+'s';
+		ms = ms % 1000;
+		return s+'s ' + ms+'ms';
 	};
 
 	function isTestableMethod(methodName) {
 		return methodName.match(/test.*/);
 	};
 
-	function checkAndTestIt(testObject, testMethod) {
-		if (testObject[testMethod]) {
-			testIt('', testObject, testMethod);
+	function checkIt(testObject, testMethod) {
+		return testObject[testMethod];
+	}
+
+	function checkAndTestIt(_this, testObject, testMethod) {
+		if (checkIt(testObject, testMethod)) {
+			testIt(_this, '', testObject, testMethod);
 		}
 	}
 
-	function testIt(n, testObject, testMethod) {
+	function testIt(_this, n, testObject, testMethod) {
 		var inTestNow = '['+testObject.constructor.name+'].'+testMethod+'()';
 		var startTime = new Date().getTime();
 		var endTime;
@@ -26,35 +34,54 @@ function JSUS(testClass) { this.testClass = testClass; }
 			testObject[testMethod]();
 			endTime = new Date().getTime();
 			{
-				console.log('  '+(n ? '  '+n+'. ' : '')+inTestNow+' [SUCCESS] ['+formatTime(endTime - startTime)+']');
+				_this.buffer.push('  '+(n ? '  '+n+'. ' : '')+inTestNow+' [SUCCESS] ['+formatTime(endTime - startTime)+']');
 			}
 		} catch (error) {
 			endTime = new Date().getTime();
 			{
-				console.log('  '+(n ? '  '+n+'. ' : '')+inTestNow+' [FAIL] ['+formatTime(endTime - startTime)+'] '+error.message);
+				_this.buffer.push('  '+(n ? '  '+n+'. ' : '')+inTestNow+' [FAIL] ['+formatTime(endTime - startTime)+'] '+error.message);
 			}
 		}
 	}
 
-	JSUS.prototype.start = function() {
+	JSUS.prototype.start = function(id) {
+		this.id = id;
 		{
-			console.log('JSUS.prototype.start');
+			with (this.buffer) {
+				push('JSUS.prototype.start')
+				push('');
+			}
 		}
 		var testObject = new this.testClass();
-		checkAndTestIt(testObject, 'beforeClass');
+		checkAndTestIt(this, testObject, 'beforeClass');
+		{
+			this.buffer.push('');
+		}
 		var n = 1;
 		for (var testMethod in testObject) {
 			if (isTestableMethod(testMethod)) {
-				testIt(n, testObject, testMethod);
+				testIt(this, n, testObject, testMethod);
 				n++;
 			}
 		}
-		checkAndTestIt(testObject, 'afterClass');
+		{
+			this.buffer.push('');
+		}
+		checkAndTestIt(this, testObject, 'afterClass');
+		{
+			this.buffer.push('');
+		}
 	};
 
 	JSUS.prototype.end = function() {
 		{
-			console.log('JSUS.prototype.end');
+			this.buffer.push('JSUS.prototype.end');
+		}
+		if (this.id) {
+			var display = document.getElementById(this.id);
+			display.innerHTML = this.buffer.join('<br />');
+		} else {
+			console.log(this.buffer.join('\n'));
 		}
 	}
 
