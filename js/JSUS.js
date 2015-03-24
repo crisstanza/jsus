@@ -134,4 +134,12 @@ function JSUS(testClass) {
 		assert(obj > limInf && obj < limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+']');
 	};
 
+	JSUS.assertEndsWith = function(obj2, obj1) {
+		assert(new RegExp(obj1+'$').test(obj2), '['+obj2+'] should ends with ['+obj1+']');
+	};
+
+	JSUS.assertStartsWith = function(obj2, obj1) {
+		assert(new RegExp('^'+obj1).test(obj2), '['+obj2+'] should starts with ['+obj1+']');
+	};
+
 })();

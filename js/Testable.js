@@ -116,3 +116,43 @@ Testable.prototype.testUndefinedFAIL = function() {
 		JSUS.assertUndefined(current);
 	}
 };
+
+Testable.prototype.testEndsWith1 = function() {
+	var expected = 1;
+	var current = 1;
+	{
+		JSUS.assertEndsWith(current, expected);
+	}
+};
+
+Testable.prototype.testEndsWithAbc = function() {
+	var expected = 'c';
+	var current = 'Abc';
+	{
+		JSUS.assertEndsWith(current, expected);
+	}
+};
+
+Testable.prototype.testStartsWith1 = function() {
+	var expected = 1;
+	var current = 1;
+	{
+		JSUS.assertStartsWith(current, expected);
+	}
+};
+
+Testable.prototype.testStartsWithAbc = function() {
+	var expected = 'A';
+	var current = 'Abc';
+	{
+		JSUS.assertStartsWith(current, expected);
+	}
+};
+
+Testable.prototype.testStartsWithAbcFAIL = function() {
+	var expected = 'X';
+	var current = 'Abc';
+	{
+		JSUS.assertStartsWith(current, expected);
+	}
+};
