@@ -1,10 +1,16 @@
 function Testable() {
 }
 
-Testable.prototype.beforeClass = function() {
+Testable.beforeClass = function() {
 }
 
-Testable.prototype.afterClass = function() {
+Testable.afterClass = function() {
+}
+
+Testable.prototype.before = function() {
+}
+
+Testable.prototype.after = function() {
 }
 
 Testable.prototype.testEquals = function() {

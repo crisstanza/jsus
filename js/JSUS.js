@@ -19,7 +19,15 @@ function JSUS(testClass) {
 	function checkIt(testObject, testMethod) {
 		return testObject[testMethod];
 	}
-
+/*
+	function checkPropertyAndTestIt(_this, testObject, testMethod) {
+		if (checkIt(testObject, testMethod)) {
+			if (testObject.hasOwnProperty(testMethod)) {
+				testIt(_this, '', testObject, testMethod);
+			}
+		}
+	}
+*/
 	function checkAndTestIt(_this, testObject, testMethod) {
 		if (checkIt(testObject, testMethod)) {
 			testIt(_this, '', testObject, testMethod);
@@ -52,22 +60,25 @@ function JSUS(testClass) {
 				push('');
 			}
 		}
-		var testObject = new this.testClass();
-		checkAndTestIt(this, testObject, 'beforeClass');
+		checkAndTestIt(this, this.testClass, 'beforeClass');
 		{
 			this.buffer.push('');
 		}
 		var n = 1;
-		for (var testMethod in testObject) {
+		var testObjectForMethodsLoop = new this.testClass();
+		for (var testMethod in testObjectForMethodsLoop) {
 			if (isTestableMethod(testMethod)) {
+				var testObject = new this.testClass();
+				checkAndTestIt(this, testObject, 'before');
 				testIt(this, n, testObject, testMethod);
+				checkAndTestIt(this, testObject, 'after');
+				{
+					this.buffer.push('');
+				}
 				n++;
 			}
 		}
-		{
-			this.buffer.push('');
-		}
-		checkAndTestIt(this, testObject, 'afterClass');
+		checkAndTestIt(this, this.testClass, 'afterClass');
 		{
 			this.buffer.push('');
 		}

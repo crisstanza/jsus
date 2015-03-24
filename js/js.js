@@ -2,7 +2,7 @@
 
 	function init() {
 		var jsus = new JSUS(Testable);
-		jsus.start();
+		jsus.start('display');
 		jsus.end();
 	}
 
