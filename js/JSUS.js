@@ -118,6 +118,10 @@ function JSUS(testClass) {
 		assert(obj === null, '['+obj+'] should be [null]');
 	};
 
+	JSUS.assertNotNull = function(obj) {
+		assert(obj !== null, '['+obj+'] should not be [null]');
+	};
+
 	JSUS.assertUndefined = function(obj) {
 		assert(obj === undefined, '['+obj+'] should be [undefined]');
 	};
