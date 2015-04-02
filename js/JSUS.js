@@ -130,8 +130,8 @@ function JSUS(testClass) {
 		assert(obj1 !== obj2, '['+obj2+'] should not be equals to ['+obj1+']');
 	};
 
-	JSUS.assertBetween = function(limInf, limSup, obj) {
-		assert(obj > limInf && obj < limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+']');
+	JSUS.assertBetween = function(limInf, obj, limSup) {
+		assert(obj >= limInf && obj <= limSup, '['+obj+'] should be between ['+limInf+'] and ['+limSup+'] inclusive');
 	};
 
 	JSUS.assertEndsWith = function(obj2, obj1) {
